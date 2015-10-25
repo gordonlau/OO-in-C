@@ -20,7 +20,7 @@ void list_insertion_and_retrieval(List *list){
     for(i=0;i<=15;i++){
         int *value = malloc(sizeof(int));
         *value = i;
-        list->add(list,(void *)value);
+        list->add(list,value);
     }
     printf("List length:%d \n",list->length(list));
     for(i=0;i<=15;i++){

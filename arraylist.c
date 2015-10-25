@@ -15,6 +15,7 @@ typedef struct {
   int size;
 }ArrayList;
 
+const char *ARRAYLIST = "ArrayList";
 
 List * new_array_list(){
   List *list = (List *)malloc(sizeof(List));
@@ -26,17 +27,24 @@ List * new_array_list(){
   list->delete = delete;
   list->add = add;
   list->get = get;
+  list->type = ARRAYLIST;
   list->data =  arrayList;
   return list;
 }
 
 static int length(List *self){
+  if(!self->data || strcmp(self->type,ARRAYLIST)!=0){
+    return 0;
+  }
   ArrayList *arrayList = self->data;
   return arrayList->size;
 }
 
 
 static void add(List *self,void  *elem){
+  if(!self->data || strcmp(self->type,ARRAYLIST)!=0){
+    return ;
+  }
   ArrayList *arrayList = self-> data;
   int size = arrayList->size;
   int capacity = arrayList->capacity;
@@ -54,6 +62,9 @@ static void add(List *self,void  *elem){
 }
 
 static void *get(List *self,int index){
+  if(!self->data || strcmp(self->type,ARRAYLIST)!=0){
+    return NULL;
+  }
   ArrayList *arrayList = self->data;
   if(index < arrayList->size){
     return arrayList->arr[index];
@@ -64,6 +75,9 @@ static void *get(List *self,int index){
 
 
 static void delete(List *self){
+  if(!self->data || strcmp(self->type,ARRAYLIST)!=0){
+    return;
+  }
   ArrayList *arrayList = self->data;
   free(arrayList->arr);
   free(arrayList);

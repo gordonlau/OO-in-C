@@ -24,6 +24,7 @@ static void *get_linked_list(Node *node,int index);
 static int length_linked_list(Node *node);
 static void delete_linked_list(Node *node);
 
+const char *LINKEDLIST = "LinkedList";
 
 
 List * new_linked_list(){
@@ -35,11 +36,15 @@ List * new_linked_list(){
   list->delete = delete;
   list->add = add;
   list->get = get;
+  list->type = LINKEDLIST;
   list->data = linkedList;
   return list;
 }
 
 static int length(List *self){
+  if(!self->data || strcmp(self->type,LINKEDLIST)!=0){
+    return 0 ;
+  }
   LinkedList *linkedList = self->data;
   if(!linkedList->first){
     return 0;
@@ -60,6 +65,9 @@ static int length_linked_list(Node *node){
 }
 
 static void add(List *self,void  *elem){
+  if(!self->data || strcmp(self->type,LINKEDLIST)!=0){
+    return;
+  }
   LinkedList *linkedList = self->data;
   Node *newNode = malloc(sizeof(Node));
   newNode->elem = elem;
@@ -75,6 +83,9 @@ static void add(List *self,void  *elem){
 }
 
 static void *get(List *self,int index){
+  if(!self->data || strcmp(self->type,LINKEDLIST)!=0){
+    return NULL;
+  }
   LinkedList *linkedList = self->data;
   if(linkedList->first){
       return get_linked_list(linkedList->first,index);
@@ -94,6 +105,9 @@ static void *get_linked_list(Node *node,int index){
 }
 
 static void delete(List *self){
+  if(!self->data || strcmp(self->type,LINKEDLIST)!=0){
+    return;
+  }
   LinkedList *linkedList = self->data;
   if(linkedList->first){
       delete_linked_list(linkedList->first);
