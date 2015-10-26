@@ -7,12 +7,12 @@ void list_insertion_and_retrieval(List *list);
 
 int main(){
 
-  List *list = new_array_list();
-  List *list2 = new_linked_list();
-  list_insertion_and_retrieval(list);
-  list_insertion_and_retrieval(list2);
-  list->delete(list);
-  list2->delete(list2);
+  ArrayList *arrayList = new_array_list();
+  LinkedList *linkedList = new_linked_list();
+  list_insertion_and_retrieval(arrayList->asList);
+  list_insertion_and_retrieval(linkedList->asList);
+  arrayList->delete(arrayList);
+  linkedList->delete(linkedList);
 }
 
 void list_insertion_and_retrieval(List *list){
@@ -22,10 +22,10 @@ void list_insertion_and_retrieval(List *list){
         *value = i;
         list->add(list,value);
     }
-    printf("List length:%d \n",list->length(list));
+    printf("%s length:%d \n",list->type,list->length(list));
     for(i=0;i<=15;i++){
         int *result = (int *)list->get(list,i);
-        printf("List %dth Element:%d \n",i,*result);
+        printf("%s %dth Element:%d \n",list->type,i,*result);
         free(result);
     }
 }

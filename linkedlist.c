@@ -3,11 +3,11 @@
 #include <stdlib.h>
 
 static int length(List *self);
-static void delete(List *self);
 static void add(List *self,void  *elem);
 static void *get(List *self,int index);
-List * new_linked_list();
 
+LinkedList * new_linked_list();
+static void delete(LinkedList *linkedList);
 
 
 typedef struct Node{
@@ -15,41 +15,47 @@ typedef struct Node{
   struct Node *next;
 }Node;
 
-typedef struct LinkedList{
+typedef struct Data{
   Node *first;
   Node *last;
-}LinkedList;
+}Data;
 
 static void *get_linked_list(Node *node,int index);
 static int length_linked_list(Node *node);
 static void delete_linked_list(Node *node);
 
-const char *LINKEDLIST = "LinkedList";
+char *LINKEDLIST = "LinkedList";
 
 
-List * new_linked_list(){
+LinkedList * new_linked_list(){
+  Data *data = malloc(sizeof(Data));
+  data->first = NULL;
+  data->last = NULL;
+
   List *list = malloc(sizeof(List));
-  LinkedList *linkedList = malloc(sizeof(LinkedList));
-  linkedList->first = NULL;
-  linkedList->last = NULL;
   list->length = length;
-  list->delete = delete;
   list->add = add;
   list->get = get;
   list->type = LINKEDLIST;
-  list->data = linkedList;
-  return list;
+  list->data = data;
+
+  LinkedList *linkedList = malloc(sizeof(LinkedList));
+  linkedList->asList = list;
+  linkedList->type = LINKEDLIST;
+  linkedList->data = data;
+  linkedList->delete = delete;
+  return linkedList;
 }
 
 static int length(List *self){
   if(!self->data || strcmp(self->type,LINKEDLIST)!=0){
     return 0 ;
   }
-  LinkedList *linkedList = self->data;
-  if(!linkedList->first){
+  Data *data = self->data;
+  if(!data->first){
     return 0;
   }
-  return length_linked_list(linkedList->first);
+  return length_linked_list(data->first);
 }
 
 static int length_linked_list(Node *node){
@@ -68,17 +74,17 @@ static void add(List *self,void  *elem){
   if(!self->data || strcmp(self->type,LINKEDLIST)!=0){
     return;
   }
-  LinkedList *linkedList = self->data;
+  Data *data = self->data;
   Node *newNode = malloc(sizeof(Node));
   newNode->elem = elem;
-  if(!linkedList->first){ // The List is currently Empty
-    linkedList->first = newNode;
-    linkedList->last = newNode;
+  if(!data->first){ // The List is currently Empty
+    data->first = newNode;
+    data->last = newNode;
   }else{
-      Node *lastNode = linkedList->last;
+      Node *lastNode = data->last;
       newNode->next = NULL;
       lastNode->next = newNode;
-      linkedList->last = newNode;
+      data->last = newNode;
   }
 }
 
@@ -86,9 +92,9 @@ static void *get(List *self,int index){
   if(!self->data || strcmp(self->type,LINKEDLIST)!=0){
     return NULL;
   }
-  LinkedList *linkedList = self->data;
-  if(linkedList->first){
-      return get_linked_list(linkedList->first,index);
+  Data *data = self->data;
+  if(data->first){
+      return get_linked_list(data->first,index);
   }else{
     return NULL;
   }
@@ -104,15 +110,16 @@ static void *get_linked_list(Node *node,int index){
   }
 }
 
-static void delete(List *self){
+static void delete(LinkedList *self){
   if(!self->data || strcmp(self->type,LINKEDLIST)!=0){
     return;
   }
-  LinkedList *linkedList = self->data;
-  if(linkedList->first){
-      delete_linked_list(linkedList->first);
+  Data *data = self->data;
+  if(data->first){
+      delete_linked_list(data->first);
   }
-  free(linkedList);
+  free(data);
+  free(self->asList);
   free(self);
 }
 

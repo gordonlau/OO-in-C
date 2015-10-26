@@ -4,40 +4,49 @@
 #include <string.h>
 
 static int length(List *self);
-static void delete(List *self);
 static void add(List *self,void  *elem);
 static void *get(List *self,int index);
-List * new_array_list();
 
-typedef struct {
+
+ArrayList * new_array_list();
+static void delete(ArrayList *arrayList);
+
+typedef struct Data{
   void **arr;
   int capacity;
   int size;
-}ArrayList;
+}Data;
 
-const char *ARRAYLIST = "ArrayList";
+char *ARRAYLIST = "ArrayList";
 
-List * new_array_list(){
+ArrayList * new_array_list(){
+
+  Data *data = malloc(sizeof(ArrayList));
+  data->arr = malloc(10*sizeof(void *));
+  data->capacity = 10;
+  data->size = 0;
+
   List *list = (List *)malloc(sizeof(List));
-  ArrayList *arrayList = malloc(sizeof(ArrayList));
-  arrayList->arr = malloc(10*sizeof(void *));
-  arrayList->capacity = 10;
-  arrayList->size = 0;
   list->length = length;
-  list->delete = delete;
   list->add = add;
   list->get = get;
   list->type = ARRAYLIST;
-  list->data =  arrayList;
-  return list;
+  list->data =  data;
+
+  ArrayList *arrayList = malloc(sizeof(ArrayList));
+  arrayList->type = ARRAYLIST;
+  arrayList->data = data;
+  arrayList->asList = list;
+  arrayList->delete = delete;
+  return arrayList;
 }
 
 static int length(List *self){
   if(!self->data || strcmp(self->type,ARRAYLIST)!=0){
     return 0;
   }
-  ArrayList *arrayList = self->data;
-  return arrayList->size;
+  Data *data = self->data;
+  return data->size;
 }
 
 
@@ -45,41 +54,42 @@ static void add(List *self,void  *elem){
   if(!self->data || strcmp(self->type,ARRAYLIST)!=0){
     return ;
   }
-  ArrayList *arrayList = self-> data;
-  int size = arrayList->size;
-  int capacity = arrayList->capacity;
+  Data *data = self-> data;
+  int size = data->size;
+  int capacity = data->capacity;
 
   if(size == capacity){
     void **newArr = malloc((10+capacity)*sizeof(void *));
 
-    memcpy(newArr,arrayList->arr,size*sizeof(void *));
-    free(arrayList->arr);
-    arrayList->arr = newArr;
-    arrayList->capacity += 10;
+    memcpy(newArr,data->arr,size*sizeof(void *));
+    free(data->arr);
+    data->arr = newArr;
+    data->capacity += 10;
   }
-  arrayList->arr[size] = elem;
-  arrayList->size++;
+  data->arr[size] = elem;
+  data->size++;
 }
 
 static void *get(List *self,int index){
   if(!self->data || strcmp(self->type,ARRAYLIST)!=0){
     return NULL;
   }
-  ArrayList *arrayList = self->data;
-  if(index < arrayList->size){
-    return arrayList->arr[index];
+  Data *data = self->data;
+  if(index < data->size){
+    return data->arr[index];
   }else{
     return NULL;
   }
 }
 
 
-static void delete(List *self){
+static void delete(ArrayList *self){
   if(!self->data || strcmp(self->type,ARRAYLIST)!=0){
     return;
   }
-  ArrayList *arrayList = self->data;
-  free(arrayList->arr);
-  free(arrayList);
+  Data *data = self->data;
+  free(data->arr);
+  free(data);
+  free(self->asList);
   free(self);
 }
