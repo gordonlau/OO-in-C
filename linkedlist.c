@@ -1,6 +1,5 @@
-#include "list.h"
-#include "linkedlist.h"
 #include <stdlib.h>
+#include "linkedlist.h"
 
 static int length(List *self);
 static void add(List *self,void  *elem);

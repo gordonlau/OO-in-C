@@ -1,7 +1,6 @@
-#include "list.h"
-#include "arraylist.h"
 #include <stdlib.h>
 #include <string.h>
+#include "arraylist.h"
 
 static int length(List *self);
 static void add(List *self,void  *elem);
@@ -26,17 +25,22 @@ ArrayList * new_array_list(){
   data->capacity = 10;
   data->size = 0;
 
-  List *list = (List *)malloc(sizeof(List));
+  List *list = malloc(sizeof(List));
   list->length = length;
   list->add = add;
   list->get = get;
   list->type = ARRAYLIST;
   list->data =  data;
 
+  RandomAccess *randomAccess  = malloc(sizeof(RandomAccess));
+  randomAccess->data = data;
+  randomAccess->type = ARRAYLIST;
+
   ArrayList *arrayList = malloc(sizeof(ArrayList));
   arrayList->type = ARRAYLIST;
   arrayList->data = data;
   arrayList->asList = list;
+  arrayList->asRandomAccess = randomAccess;
   arrayList->delete = delete;
   return arrayList;
 }
@@ -91,5 +95,6 @@ static void delete(ArrayList *self){
   free(data->arr);
   free(data);
   free(self->asList);
+  free(self->asRandomAccess);
   free(self);
 }

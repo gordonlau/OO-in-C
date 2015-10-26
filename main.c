@@ -4,6 +4,7 @@
 #include "linkedlist.h"
 
 void list_insertion_and_retrieval(List *list);
+void print_random_access_type(RandomAccess *randomAccess);
 
 int main(){
 
@@ -11,6 +12,7 @@ int main(){
   LinkedList *linkedList = new_linked_list();
   list_insertion_and_retrieval(arrayList->asList);
   list_insertion_and_retrieval(linkedList->asList);
+  print_random_access_type(arrayList->asRandomAccess);
   arrayList->delete(arrayList);
   linkedList->delete(linkedList);
 }
@@ -28,4 +30,8 @@ void list_insertion_and_retrieval(List *list){
         printf("%s %dth Element:%d \n",list->type,i,*result);
         free(result);
     }
+}
+
+void print_random_access_type(RandomAccess *randomAccess){
+  printf("%s is a subtype of RandomAccess\n",randomAccess->type);
 }
