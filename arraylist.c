@@ -20,7 +20,7 @@ char *ARRAYLIST = "ArrayList";
 
 ArrayList * new_array_list(){
 
-  Data *data = malloc(sizeof(ArrayList));
+  Data *data = malloc(sizeof(data));
   data->arr = malloc(10*sizeof(void *));
   data->capacity = 10;
   data->size = 0;
