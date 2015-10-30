@@ -3,7 +3,7 @@
 #include "arraylist.h"
 
 static int length(List *self);
-static void add(List *self,void  *elem);
+static List * add(List *self,void  *elem);
 static void *get(List *self,int index);
 
 
@@ -54,9 +54,9 @@ static int length(List *self){
 }
 
 
-static void add(List *self,void  *elem){
+static List * add(List *self,void  *elem){
   if(!self->data || strcmp(self->type,ARRAYLIST)!=0){
-    return ;
+    return self;
   }
   Data *data = self-> data;
   int size = data->size;
@@ -72,6 +72,7 @@ static void add(List *self,void  *elem){
   }
   data->arr[size] = elem;
   data->size++;
+  return self;
 }
 
 static void *get(List *self,int index){

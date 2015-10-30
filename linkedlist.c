@@ -2,7 +2,7 @@
 #include "linkedlist.h"
 
 static int length(List *self);
-static void add(List *self,void  *elem);
+static List * add(List *self,void  *elem);
 static void *get(List *self,int index);
 
 LinkedList * new_linked_list();
@@ -69,9 +69,9 @@ static int length_linked_list(Node *node){
   }
 }
 
-static void add(List *self,void  *elem){
+static List * add(List *self,void  *elem){
   if(!self->data || strcmp(self->type,LINKEDLIST)!=0){
-    return;
+    return self;
   }
   Data *data = self->data;
   Node *newNode = malloc(sizeof(Node));
@@ -85,6 +85,7 @@ static void add(List *self,void  *elem){
       lastNode->next = newNode;
       data->last = newNode;
   }
+  return self;
 }
 
 static void *get(List *self,int index){
