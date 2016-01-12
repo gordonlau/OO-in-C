@@ -5,8 +5,8 @@ static int length(List *self);
 static List * add(List *self,void  *elem);
 static void *get(List *self,int index);
 
-LinkedList * new_linked_list();
-static void delete(LinkedList *linkedList);
+List * new_linked_list();
+static void delete(List *self);
 
 
 typedef struct Node{
@@ -26,7 +26,7 @@ static void delete_linked_list(Node *node);
 char *LINKEDLIST = "LinkedList";
 
 
-LinkedList * new_linked_list(){
+List * new_linked_list(){
   Data *data = malloc(sizeof(Data));
   data->first = NULL;
   data->last = NULL;
@@ -35,15 +35,10 @@ LinkedList * new_linked_list(){
   list->length = length;
   list->add = add;
   list->get = get;
+  list->delete = delete;
   list->type = LINKEDLIST;
   list->data = data;
-
-  LinkedList *linkedList = malloc(sizeof(LinkedList));
-  linkedList->asList = list;
-  linkedList->type = LINKEDLIST;
-  linkedList->data = data;
-  linkedList->delete = delete;
-  return linkedList;
+  return list;
 }
 
 static int length(List *self){
@@ -110,7 +105,7 @@ static void *get_linked_list(Node *node,int index){
   }
 }
 
-static void delete(LinkedList *self){
+static void delete(List *self){
   if(!self->data || strcmp(self->type,LINKEDLIST)!=0){
     return;
   }
@@ -119,7 +114,6 @@ static void delete(LinkedList *self){
       delete_linked_list(data->first);
   }
   free(data);
-  free(self->asList);
   free(self);
 }
 

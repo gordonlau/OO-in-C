@@ -5,18 +5,16 @@
 #include "linkedlist.h"
 
 void list_insertion_and_retrieval(List *list);
-void print_random_access_type(RandomAccess *randomAccess);
 void list_add_fluent_api(List *list);
 void print_list(List *list);
 
 int main(){
 
-  ArrayList *arrayList = new_array_list();
-  LinkedList *linkedList = new_linked_list();
-  list_insertion_and_retrieval(arrayList->asList);
-  list_insertion_and_retrieval(linkedList->asList);
-  list_add_fluent_api(arrayList->asList);
-  print_random_access_type(arrayList->asRandomAccess);
+  List *arrayList = new_array_list();
+  List *linkedList = new_linked_list();
+  list_insertion_and_retrieval(arrayList);
+  list_insertion_and_retrieval(linkedList);
+  list_add_fluent_api(arrayList);
   arrayList->delete(arrayList);
   linkedList->delete(linkedList);
 }
@@ -32,12 +30,9 @@ void list_insertion_and_retrieval(List *list){
     print_list(list);
 }
 
-void print_random_access_type(RandomAccess *randomAccess){
-  printf("%s is a subtype of RandomAccess\n",randomAccess->type);
-}
 
 void list_add_fluent_api(List *list){
-  int one=1,two=2,three=3,i;
+  int one=1,two=2,three=3;
   list->add(list,&one)
   ->add(list,&two)
   ->add(list,&three);

@@ -7,8 +7,8 @@ static List * add(List *self,void  *elem);
 static void *get(List *self,int index);
 
 
-ArrayList * new_array_list();
-static void delete(ArrayList *arrayList);
+List * new_array_list();
+static void delete(List *self);
 
 typedef struct Data{
   void **arr;
@@ -18,7 +18,7 @@ typedef struct Data{
 
 char *ARRAYLIST = "ArrayList";
 
-ArrayList * new_array_list(){
+List * new_array_list(){
 
   Data *data = malloc(sizeof(Data));
   data->arr = malloc(10*sizeof(void *));
@@ -29,20 +29,10 @@ ArrayList * new_array_list(){
   list->length = length;
   list->add = add;
   list->get = get;
+  list->delete = delete;
   list->type = ARRAYLIST;
   list->data =  data;
-
-  RandomAccess *randomAccess  = malloc(sizeof(RandomAccess));
-  randomAccess->data = data;
-  randomAccess->type = ARRAYLIST;
-
-  ArrayList *arrayList = malloc(sizeof(ArrayList));
-  arrayList->type = ARRAYLIST;
-  arrayList->data = data;
-  arrayList->asList = list;
-  arrayList->asRandomAccess = randomAccess;
-  arrayList->delete = delete;
-  return arrayList;
+  return list;
 }
 
 static int length(List *self){
@@ -88,14 +78,12 @@ static void *get(List *self,int index){
 }
 
 
-static void delete(ArrayList *self){
+static void delete(List *self){
   if(!self->data || strcmp(self->type,ARRAYLIST)!=0){
     return;
   }
   Data *data = self->data;
   free(data->arr);
   free(data);
-  free(self->asList);
-  free(self->asRandomAccess);
   free(self);
 }
